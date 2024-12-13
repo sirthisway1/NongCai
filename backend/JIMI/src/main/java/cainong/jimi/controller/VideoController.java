@@ -63,7 +63,7 @@ public class VideoController {
     }
 
     @PostMapping("/updateVideo")
-    public boolean updateVideo(@RequestBody VideoUpdateDTO videoUpdateDTO) {
+    public boolean updateVideo(@ModelAttribute VideoUpdateDTO videoUpdateDTO) {
         return videoService.updateVideo(videoUpdateDTO);
     }
 }
