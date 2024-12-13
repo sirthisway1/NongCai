@@ -28,7 +28,7 @@ public class VideoController {
         return videoService.getRecommendedVideos();
     }
 
-    @PostMapping("/upload")
+    @PostMapping("/uploadVideo")
     public ResponseEntity<?> uploadVideo(@RequestParam("video") MultipartFile file) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("文件不能为空");
@@ -41,6 +41,20 @@ public class VideoController {
         try {
             UploadVideoDTO videoDTO = videoService.saveVideo(file, video);
             return ResponseEntity.ok(videoDTO);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("上传过程中出现错误");
+        }
+    }
+
+    @PostMapping("/uploadImg")
+    public ResponseEntity<?> uploadImg(@RequestParam("Img") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("文件不能为空");
+        }
+        try {
+            String videoImage = videoService.saveImg(file);
+            return ResponseEntity.ok(videoImage);
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("上传过程中出现错误");

@@ -19,4 +19,5 @@ public interface VideoService extends IService<Video> {
 
     UploadVideoDTO saveVideo(MultipartFile file, Video video) throws IOException;
 
+    String saveImg(MultipartFile file) throws IOException;
 }

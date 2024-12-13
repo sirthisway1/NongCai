@@ -29,8 +29,11 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Autowired
     private VideoMapper videoMapper;
 
-    @Value("${video.upload-dir}")
-    private String uploadDir;
+    @Value("${video.upload-video-dir}")
+    private String uploadVideoDir;
+
+    @Value("${video.upload-image-dir}")
+    private String uploadImageDir;
 
     @Value("${server.port}")
     private int port;
@@ -81,7 +84,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         }
 
         // 创建上传目录（如果不存在）
-        Path uploadPath = Paths.get(uploadDir);
+        Path uploadPath = Paths.get(uploadVideoDir);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
@@ -91,7 +94,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         video.setVideoID(fileFullName);
 
         // 创建文件并保存
-        File videoFile = new File(uploadDir + fileFullName);
+        File videoFile = new File(uploadVideoDir + fileFullName);
         file.transferTo(videoFile);
 
         // 设置视频地址（HTTP形式）
@@ -107,6 +110,31 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         uploadVideoDTO.setVideoAddress(video.getVideoAddress());
 
         return uploadVideoDTO;
+    }
+
+    @Override
+    public String saveImg(MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("文件不能为空");
+        }
+
+        // 创建上传目录（如果不存在）
+        Path uploadPath = Paths.get(uploadImageDir);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        // 生成唯一文件名
+        String fileFullName = generateUniqueFileName(file.getOriginalFilename());
+
+        // 创建文件并保存
+        File videoFile = new File(uploadImageDir + fileFullName);
+        file.transferTo(videoFile);
+
+        // 设置视频地址（HTTP形式）
+        String uploadPathHttp = "http://" + downloadIp + ":" + port + "/videos/" + fileFullName;
+
+        return uploadPathHttp;
     }
 
     @Override

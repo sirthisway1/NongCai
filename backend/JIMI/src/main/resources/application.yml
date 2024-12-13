@@ -12,7 +12,9 @@ file:
   upload:
     path: /staticFile/upload
 video:
-  upload-dir: D:/nWork/videos/
+  upload-video-dir: D:/nWork/videos/
+  upload-image-dir: D:/nWork/image/
+
 server:
   port: 8090
   host: localhost
