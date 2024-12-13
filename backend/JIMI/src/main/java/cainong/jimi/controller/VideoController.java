@@ -2,6 +2,7 @@ package cainong.jimi.controller;
 
 import cainong.jimi.DTO.RecommendVideoDTO;
 import cainong.jimi.DTO.UploadVideoDTO;
+import cainong.jimi.DTO.VideoUpdateDTO;
 import cainong.jimi.entity.Video;
 import cainong.jimi.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,16 +62,8 @@ public class VideoController {
         }
     }
 
-    @GetMapping("/play/{videoName}")
-    public ResponseEntity<Resource> playVideo(@PathVariable String videoName) {
-        Video video = videoService.getVideoByVideoID(videoName);
-        if (video != null) {
-            Resource videoResource = new FileSystemResource(video.getVideoAddress());
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + video.getVideoName() + "\"")
-                    .body(videoResource);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @PostMapping("/updateVideo")
+    public boolean updateVideo(@RequestBody VideoUpdateDTO videoUpdateDTO) {
+        return videoService.updateVideo(videoUpdateDTO);
     }
 }

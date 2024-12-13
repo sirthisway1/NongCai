@@ -2,6 +2,7 @@ package cainong.jimi.service.impl;
 
 import cainong.jimi.DTO.RecommendVideoDTO;
 import cainong.jimi.DTO.UploadVideoDTO;
+import cainong.jimi.DTO.VideoUpdateDTO;
 import cainong.jimi.entity.Video;
 import cainong.jimi.mapper.VideoMapper;
 import cainong.jimi.service.VideoService;
@@ -146,5 +147,23 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         // 截取 UUID 的部分字符串以确保总长度不超过32个字符
         String uniquePart = uuid.substring(0, Math.min(uuid.length(), 32 - fileExtension.length()));
         return uniquePart + fileExtension;
+    }
+
+    @Override
+    public boolean updateVideo(VideoUpdateDTO videoUpdateDTO) {
+
+        // 根据 videoID 查找视频
+        Video existingVideo = videoMapper.selectById(videoUpdateDTO.getVideoID());
+        if (existingVideo == null) {
+            return false;
+        }
+
+        // 更新视频的其他字段
+        existingVideo.setVideoName(videoUpdateDTO.getVideoName());
+        existingVideo.setVideoImage(videoUpdateDTO.getVideoImage());
+        existingVideo.setVideoType(videoUpdateDTO.getVideoType());
+
+        // 执行更新操作
+        return videoMapper.updateById(existingVideo) > 0;
     }
 }
