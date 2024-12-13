@@ -2,6 +2,7 @@ package cainong.jimi.controller;
 
 import cainong.jimi.DTO.RecommendVideoDTO;
 import cainong.jimi.DTO.UploadVideoDTO;
+import cainong.jimi.DTO.VideoSearchDTO;
 import cainong.jimi.DTO.VideoUpdateDTO;
 import cainong.jimi.entity.Video;
 import cainong.jimi.service.VideoService;
@@ -65,5 +66,10 @@ public class VideoController {
     @PostMapping("/updateVideo")
     public boolean updateVideo(@ModelAttribute VideoUpdateDTO videoUpdateDTO) {
         return videoService.updateVideo(videoUpdateDTO);
+    }
+
+    @GetMapping("/searchVideoByName")
+    public List<VideoSearchDTO> searchVideoByName(@RequestParam String keyword) {
+        return videoService.searchVideoByName(keyword);
     }
 }

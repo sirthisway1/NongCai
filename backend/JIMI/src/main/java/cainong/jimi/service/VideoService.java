@@ -3,6 +3,7 @@ package cainong.jimi.service;
 import cainong.jimi.DTO.RecommendVideoDTO;
 import cainong.jimi.DTO.UploadVideoDTO;
 import cainong.jimi.DTO.VideoUpdateDTO;
+import cainong.jimi.DTO.VideoSearchDTO;
 import cainong.jimi.entity.Video;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -23,4 +24,6 @@ public interface VideoService extends IService<Video> {
     String saveImg(MultipartFile file) throws IOException;
 
     boolean updateVideo(VideoUpdateDTO videoUpdateDTO);
+
+    List<VideoSearchDTO> searchVideoByName(String keyword);
 }

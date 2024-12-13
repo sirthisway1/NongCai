@@ -2,6 +2,7 @@ package cainong.jimi.service.impl;
 
 import cainong.jimi.DTO.RecommendVideoDTO;
 import cainong.jimi.DTO.UploadVideoDTO;
+import cainong.jimi.DTO.VideoSearchDTO;
 import cainong.jimi.DTO.VideoUpdateDTO;
 import cainong.jimi.entity.Video;
 import cainong.jimi.mapper.VideoMapper;
@@ -165,5 +166,24 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
         // 执行更新操作
         return videoMapper.updateById(existingVideo) > 0;
+    }
+
+    @Override
+    public List<VideoSearchDTO> searchVideoByName(String keyword) {
+
+        // 使用 lambdaQuery 进行关键字查询
+        List<Video> videos = videoMapper.selectList(new QueryWrapper<Video>()
+                .like("videoName", keyword));
+
+        // 将查询结果转换为 VideoSearchDTO 列表
+        return videos.stream()
+                .map(video -> {
+                    VideoSearchDTO dto = new VideoSearchDTO();
+                    dto.setVideoID(video.getVideoID());
+                    dto.setVideoName(video.getVideoName());
+                    dto.setVideoImage(video.getVideoImage());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }
