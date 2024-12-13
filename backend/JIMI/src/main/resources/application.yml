@@ -18,3 +18,10 @@ video:
 server:
   port: 8090
   host: localhost
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: cainong.jimi.entity
+  global-config:
+    db-config:
+      id-type: auto

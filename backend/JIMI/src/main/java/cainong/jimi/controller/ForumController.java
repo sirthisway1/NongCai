@@ -1,15 +1,15 @@
 package cainong.jimi.controller;
 
+import cainong.jimi.DTO.ForumDTO;
 import cainong.jimi.entity.Forum;
 import cainong.jimi.service.ForumService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/forum")
 public class ForumController {
 
     @Autowired
@@ -26,4 +26,11 @@ public class ForumController {
     public Forum getForum(@PathVariable String forumID) {
         return forumService.getForumById(forumID);
     }
+
+    @PostMapping("/create")
+    public boolean createForum(@RequestBody ForumDTO forumDTO) {
+        return forumService.createForum(forumDTO.getTitle(), forumDTO.getContent(), forumDTO.getType(), forumDTO.getUsername());
+    }
+
+
 }

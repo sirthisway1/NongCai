@@ -9,4 +9,7 @@ public interface ForumService {
 
     // 根据 forumID 获取指定帖子
     Forum getForumById(String forumID);
+
+    boolean createForum(String title, String content, String type, String username);
+
 }
