@@ -47,22 +47,13 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         this.videoMapper = videoMapper;
     }
 
+
     @Override
     public List<RecommendVideoDTO> getRecommendedVideos() {
-        long totalVideos = videoMapper.selectCount(null);
-
-        Random rand = new Random();
-        int pageSize = 8;  // 每页返回 8 个视频
-        int totalPages = (int) Math.ceil((double) totalVideos / pageSize);
-
-        int randomPage = 1;
-        if (totalPages > 1) {
-            randomPage = rand.nextInt(totalPages) + 1; // 随机选择一个页码
-        }
-
-        // 分页查询
+        // 随机选择 8 个视频
         QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
-        List<Video> recommendedVideos = videoMapper.selectPage(new Page<>(randomPage, pageSize), queryWrapper).getRecords();
+        queryWrapper.orderByAsc(new Random().nextBoolean(), "RAND()").last("LIMIT 8");
+        List<Video> recommendedVideos = videoMapper.selectList(queryWrapper);
 
         // 将 Video 实体转换为 RecommendVideoDTO
         return recommendedVideos.stream()
