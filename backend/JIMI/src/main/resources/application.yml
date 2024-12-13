@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/nongcai?useUnicode=true&useSSL=false&character_set_server=utf8mb4&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+file:
+  upload:
+    path: /staticFile/upload
+video:
+  upload-dir: D:/nWork/videos/
+server:
+  port: 8090
+  host: localhost
