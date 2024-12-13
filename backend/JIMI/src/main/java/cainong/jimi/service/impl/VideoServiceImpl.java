@@ -128,11 +128,11 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         String fileFullName = generateUniqueFileName(file.getOriginalFilename());
 
         // 创建文件并保存
-        File videoFile = new File(uploadImageDir + fileFullName);
-        file.transferTo(videoFile);
+        File imageFile = new File(uploadImageDir + fileFullName);
+        file.transferTo(imageFile);
 
         // 设置视频地址（HTTP形式）
-        String uploadPathHttp = "http://" + downloadIp + ":" + port + "/videos/" + fileFullName;
+        String uploadPathHttp = "http://" + downloadIp + ":" + port + "/images/" + fileFullName;
 
         return uploadPathHttp;
     }
