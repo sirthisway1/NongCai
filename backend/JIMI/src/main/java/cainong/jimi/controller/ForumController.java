@@ -29,7 +29,7 @@ public class ForumController {
 
     @PostMapping("/create")
     public boolean createForum(@RequestBody ForumDTO forumDTO) {
-        return forumService.createForum(forumDTO.getTitle(), forumDTO.getContent(), forumDTO.getType(), forumDTO.getUsername());
+        return forumService.createForum(forumDTO.getForumTitle(), forumDTO.getForumContent(), forumDTO.getForumType(), forumDTO.getForumUsername());
     }
 
 
