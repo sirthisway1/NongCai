@@ -48,7 +48,7 @@ public class VideoController {
     }
 
     @PostMapping("/uploadImg")
-    public ResponseEntity<?> uploadImg(@RequestParam("Img") MultipartFile file) {
+    public ResponseEntity<?> uploadImg(@RequestParam("image") MultipartFile file) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("文件不能为空");
         }
