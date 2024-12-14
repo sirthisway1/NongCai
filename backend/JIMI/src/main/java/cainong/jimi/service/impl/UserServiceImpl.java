@@ -1,15 +1,35 @@
 package cainong.jimi.service.impl;
 
+import cainong.jimi.DTO.UserUpdateDTO;
 import cainong.jimi.entity.User;
 import cainong.jimi.mapper.UserMapper;
+import cainong.jimi.mapper.VideoMapper;
 import cainong.jimi.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Value("${video.upload-avator-dir}")
+    private String uploadAvatorDir;
+
+    @Value("${server.port}")
+    private int port;
+
+    @Value("${server.host}")
+    private String downloadIp;
 
     @Autowired
     private UserMapper userMapper;
@@ -57,4 +77,65 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.eq("userID", userID);
         return userMapper.selectOne(queryWrapper);
     }
+
+    @Override
+    public String saveImg(MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("文件不能为空");
+        }
+
+        // 创建上传目录（如果不存在）
+        Path uploadPath = Paths.get(uploadAvatorDir);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        // 生成唯一文件名
+        String fileFullName = generateUniqueFileName(file.getOriginalFilename());
+
+        // 创建文件并保存
+        File imageFile = new File(uploadAvatorDir + fileFullName);
+        file.transferTo(imageFile);
+
+        // 设置视频地址（HTTP形式）
+        String uploadPathHttp = "http://" + downloadIp + ":" + port + "/avators/" + fileFullName;
+
+        return uploadPathHttp;
+    }
+
+    // 获取文件扩展名
+    private String getFileExtension(String fileName) {
+        return fileName.substring(fileName.lastIndexOf("."));
+    }
+
+    private String generateUniqueFileName(String originalFilename) {
+        // 生成 UUID 并去掉分隔符
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        // 获取文件扩展名
+        String fileExtension = getFileExtension(originalFilename);
+        // 截取 UUID 的部分字符串以确保总长度不超过32个字符
+        String uniquePart = uuid.substring(0, Math.min(uuid.length(), 32 - fileExtension.length()));
+        return uniquePart + fileExtension;
+    }
+
+    @Override
+    public boolean updateUserInfo(UserUpdateDTO userUpdatedto) {
+        // 查询数据库中的用户
+        User user = userMapper.selectById(userUpdatedto.getUserID());
+        if (user != null) {
+            // 根据用户传入的表单数据更新用户信息
+            user.setUsername(userUpdatedto.getUsername());
+            user.setUserGender(userUpdatedto.getUserGender());
+            user.setUserImg(userUpdatedto.getUserImg());
+            user.setUserAddress(userUpdatedto.getUserAddress());
+            user.setUserPhone(userUpdatedto.getUserPhone());
+            user.setUserEmail(userUpdatedto.getUserEmail());
+
+            // 执行更新操作
+            int result = userMapper.updateById(user);
+            return result > 0;  // 返回是否更新成功
+        }
+        return false;  // 用户不存在
+    }
+
 }

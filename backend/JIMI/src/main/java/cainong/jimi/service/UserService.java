@@ -1,6 +1,10 @@
 package cainong.jimi.service;
 
+import cainong.jimi.DTO.UserUpdateDTO;
 import cainong.jimi.entity.User;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public interface UserService {
 
@@ -15,4 +19,9 @@ public interface UserService {
     boolean register(String username,String password);
 
     User getUserInfo(String userID);
+
+    String saveImg(MultipartFile file) throws IOException;
+
+    boolean updateUserInfo(UserUpdateDTO userForm);
+
 }
