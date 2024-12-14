@@ -1,5 +1,6 @@
 package cainong.jimi.controller;
 
+import cainong.jimi.DTO.ForumReplyDTO;
 import cainong.jimi.entity.Forumreply;
 import cainong.jimi.service.ForumreplyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,16 +9,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/forumReply")
 public class ForumreplyController {
 
     @Autowired
     private ForumreplyService forumreplyService;
 
-    // 发表评论
-    @PostMapping("/reply")
-    public String postReply(@RequestBody Forumreply forumreply) {
-        boolean success = forumreplyService.postReply(forumreply);
-        return success ? "评论发布成功" : "评论发布失败";
+    @PostMapping("/add")
+    public String addForumReply(@RequestBody ForumReplyDTO forumReplyDTO) {
+        boolean result = forumreplyService.addReply(forumReplyDTO);
+        return result ? "Reply added successfully!" : "Failed to add reply.";
     }
 
     // 获取指定帖子的所有评论

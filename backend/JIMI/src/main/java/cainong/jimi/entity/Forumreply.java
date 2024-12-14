@@ -1,5 +1,7 @@
 package cainong.jimi.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
@@ -15,17 +17,22 @@ public class Forumreply implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId("replyID")
+    @TableId(value = "replyID", type = IdType.ASSIGN_UUID)
     private String replyID;
 
+    @TableField("replyContent")
     private String replyContent;
 
+    @TableField("replyTime")
     private String replyTime;
 
+    @TableField("replyImg")
     private String replyImg;
 
+    @TableField("replyForumID")
     private String replyForumID;
 
+    @TableField("replyName")
     private String replyName;
 
     public String getReplyID() {
