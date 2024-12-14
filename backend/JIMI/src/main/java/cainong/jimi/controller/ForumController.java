@@ -22,7 +22,7 @@ public class ForumController {
     }
 
     // 根据 forumID 获取指定帖子
-    @GetMapping("/forum/{forumID}")
+    @GetMapping("/{forumID}")
     public Forum getForum(@PathVariable String forumID) {
         return forumService.getForumById(forumID);
     }
